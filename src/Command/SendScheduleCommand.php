@@ -23,23 +23,10 @@ class SendScheduleCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $bot_api_key  = '2118172018:AAE3BGPeOkqTw3624TSj9kMi-Y-o40FnkxI';
-        $bot_username = 'ATLAS_DAILY_BOT';
-        $hook_url     = 'http://152.70.178.2:8000';
+        $message = urlencode('Todays number: ' . rand(1, 99999999));
+        $url = "https://api.telegram.org/bot2118172018:AAE3BGPeOkqTw3624TSj9kMi-Y-o40FnkxI/sendMessage?text=$message&chat_id=392059332";
 
-        try {
-            // Create Telegram API object
-            $telegram = new Telegram($bot_api_key, $bot_username);
-
-            // Set webhook
-            $result = $telegram->setWebhook($hook_url);
-            if ($result->isOk()) {
-                echo $result->getDescription();
-            }
-        } catch (TelegramException $e) {
-            // log telegram errors
-            // echo $e->getMessage();
-        }
+        file_get_contents($url);
 
         $output->writeln('Success');
 
