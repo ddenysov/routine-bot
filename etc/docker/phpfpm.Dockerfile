@@ -16,8 +16,5 @@ RUN apk add --no-cache unzip libxml2 libxml2-dev libpng-dev libzip-dev readline-
     && if [ "$DA_DEBUG" = "true" ]; then apk add --no-cache $PHPIZE_DEPS && pecl install xdebug-3.0.4 \
     && docker-php-ext-enable xdebug; fi
 
-RUN apk update && apk add --no-cache libv8-alpine && pecl install v8js  \
-    && docker-php-ext-enable v8js
-
 ENV LD_PRELOAD /usr/lib/preloadable_libiconv.so php
 ENV GIT_SSL_NO_VERIFY=true
