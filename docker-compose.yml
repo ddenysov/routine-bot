@@ -1,0 +1,49 @@
+version: '3'
+services:
+  php-fpm:
+        build:
+          context: .
+          dockerfile: ./etc/docker/phpfpm.Dockerfile
+          args:
+            - DA_DEBUG=true
+        volumes:
+            - ./:/var/www/html:cached
+            - ./etc/docker/phpfpm:/usr/local/etc/php/custom.d
+            - /var/www/html/node_modules
+            - /var/www/html/.git
+            - /var/www/html/.idea
+            - /var/www/html/etc/docker
+            - /var/www/html/etc/docker/mysql/mysql-data
+            - /var/www/html/etc/docker/mysql/mysql-test-data
+        links:
+            - mysql
+        image: php-fpm
+        environment:
+          DA_DEBUG: "true"
+          PHP_IDE_CONFIG: ${PHP_IDE_CONFIG}
+          PHP_INI_SCAN_DIR: "/usr/local/etc/php/custom.d:/usr/local/etc/php/conf.d"
+          XDEBUG_CONFIG: "remote_host=${XDEBUG_REMOTE_HOST} remote_port=9005 remote_enable=1 profiler_enable=0 profiler_enable_trigger=1 profiler_output_dir=/var/www/html/profiler"
+
+  nginx:
+        image: nginx:latest
+        links:
+          - php-fpm
+        volumes:
+          - ./public:/var/www/html/public:cached
+          - ./etc/docker/nginx/conf.d:/etc/nginx/conf.d:cached
+        ports:
+          - "8000:80"
+        expose:
+          - 8000
+
+  mysql:
+      image: mysql:5.7
+      environment:
+        - MYSQL_ROOT_PASSWORD=password
+        - MYSQL_DATABASE=project
+        - MYSQL_USER=root
+        - MYSQL_PASSWORD=password
+      ports:
+        - "3310:3306"
+      volumes:
+        - ${MYSQL_STORAGE-./var/db/mysql-storage}:/var/lib/mysql
