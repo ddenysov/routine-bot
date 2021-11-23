@@ -1,0 +1,30 @@
+# config/packages/telegram.yaml
+
+telegram_bot_api:
+  # Proxy (optional) :
+  #proxy: 'socks5h://127.0.0.1:5090' # this is example you have to change this
+  #async_requests: false
+
+  # Development section:
+  development:
+    # implement in next version
+    # Telegram user_id of developers accounts
+    developers_id: [392059332]
+    # If this mode is enabled, the robot only responds to the developers
+    maintenance:
+      text: "The robot is being repaired! Please come back later."
+
+  # Bots:
+  bots:
+    # The bot name
+    first:
+      # Your bot token: (required)
+      token: 2118172018:AAE3BGPeOkqTw3624TSj9kMi-Y-o40FnkxI
+      maintenance: false
+    second:
+      # Your bot token: (required)
+      token: 123456789:ABCD1234****4321CBA
+      maintenance: false
+
+  # The default bot returned when you call getBot()
+  default: 'first'
