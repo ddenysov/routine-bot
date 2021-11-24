@@ -26,6 +26,9 @@
     "google/auth": {
         "version": "v1.18.0"
     },
+    "guzzle/guzzle": {
+        "version": "v3.8.1"
+    },
     "guzzlehttp/guzzle": {
         "version": "7.4.0"
     },
@@ -52,6 +55,9 @@
     },
     "league/event": {
         "version": "2.2.0"
+    },
+    "matteocacciola/php-trello-api": {
+        "version": "0.9.3"
     },
     "monolog/monolog": {
         "version": "2.3.5"
