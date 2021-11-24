@@ -18,6 +18,12 @@
     },
     "require-dev": {
     },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/denisov1985/php-trello-api"
+        }
+    ],
     "config": {
         "optimize-autoloader": true,
         "preferred-install": {
