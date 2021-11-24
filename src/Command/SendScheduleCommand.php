@@ -46,10 +46,28 @@ class SendScheduleCommand extends Command
         $response = $service->spreadsheets_values->get($spreadsheetId, $range);
         $values = $response->getValues();
 
-        $this->bot->getBot('first')->sendMessage([
-            'chat_id' => '392059332',
-            'text'    => $values[rand(1, 4)][3] . ' - ' . $values[rand(1, 4)][0],
-        ]);
+        $result = [];
+        $index = 0;
+        foreach ($values as $key => $value) {
+            if ($key === 0) {
+                continue;
+            }
+
+            $daysDiff = $value[4];
+
+            if ($daysDiff <= 0) {
+                $index++;
+                $suffix = $daysDiff < 0 ? " ($daysDiff дней назад)" : ' (сегодня)';
+                $result[] = "$index). " . $value[0] . $suffix;
+            }
+        }
+
+        if (!empty($result)) {
+            $this->bot->getBot('first')->sendMessage([
+                'chat_id' => '392059332',
+                'text'    => implode(PHP_EOL, $result),
+            ]);
+        }
 
         $output->writeln('Success');
 
