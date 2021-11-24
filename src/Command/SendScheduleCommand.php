@@ -10,6 +10,36 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class SendScheduleCommand extends Command
 {
+    /**
+     * Week days
+     */
+    const WEEK_DAYSS = [
+        1 => 'Понедельник',
+        2 => 'Вторник',
+        3 => 'Среда',
+        4 => 'Четверг',
+        5 => 'Пятница',
+        6 => 'Суббота',
+        7 => 'Воскресенье',
+    ];
+
+    /**
+     * Ьщтеры
+     */
+    const MONTH = [
+        1  => 'январь',
+        2  => 'февраль',
+        3  => 'март',
+        4  => 'апрель',
+        5  => 'мая',
+        6  => 'июнь',
+        7  => 'июль',
+        8  => 'август',
+        9  => 'сентябрь',
+        10 => 'октябрь',
+        11 => 'ноябрь',
+        12 => 'декабрь',
+    ];
 
     // the name of the command (the part after "bin/console")
     protected static $defaultName = 'app:send-schedule';
@@ -44,10 +74,13 @@ class SendScheduleCommand extends Command
         $range         = "Tasks!A:E";
 
         $response = $service->spreadsheets_values->get($spreadsheetId, $range);
-        $values = $response->getValues();
+        $values   = $response->getValues();
 
-        $result = [];
-        $index = 0;
+        $result = [
+            date('d') . ' ' . self::MONTH[date('m')] . ', ' . self::WEEK_DAYSS[date('N')],
+            '',
+        ];
+        $index  = 0;
         foreach ($values as $key => $value) {
             if ($key === 0) {
                 continue;
@@ -57,12 +90,12 @@ class SendScheduleCommand extends Command
 
             if ($daysDiff <= 0) {
                 $index++;
-                $suffix = $daysDiff < 0 ? " ($daysDiff дней назад)" : ' (сегодня)';
+                $suffix   = $daysDiff < 0 ? " ($daysDiff дней назад)" : ' (сегодня)';
                 $result[] = "$index). " . $value[0] . $suffix;
             }
         }
 
-        if (!empty($result)) {
+        if ($index > 0) {
             $this->bot->getBot('first')->sendMessage([
                 'chat_id' => '392059332',
                 'text'    => implode(PHP_EOL, $result),
