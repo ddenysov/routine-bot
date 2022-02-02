@@ -77,7 +77,7 @@ class SendScheduleCommand extends Command
         $values   = $response->getValues();
 
         $result = [
-            date('d') . ' ' . self::MONTH[date('m')] . ', ' . self::WEEK_DAYSS[date('N')],
+            intval(date('d')) . ' ' . self::MONTH[intval(date('m'))] . ', ' . self::WEEK_DAYSS[intval(date('N'))],
             '',
         ];
         $index  = 0;
